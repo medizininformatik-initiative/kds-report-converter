@@ -19,14 +19,12 @@ def load_config():
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dsfbaseurl', help='base url of your local fhir server', default="https://dsf.fdpg.test.forschen-fuer-gesundheit.de/fhir")
-parser.add_argument('--siteidents', help='basic auth user fhir server', nargs="?", default="ukhd.de,uk-koeln.de,ukm.de,uksh.de,umg.eu,www.med.uni-magdeburg.de")
 parser.add_argument('--certfile', help='dsf client cert cert filepath', nargs="?", default="./certs/cert.pem")
 parser.add_argument('--keyfile', help='dsf client cert key filepath', nargs="?", default="./certs/key.pem")
 parser.add_argument('--loglevel', help='log level - possible values: DEBUG,INFO,WARNING,ERROR,CRITICAL ', nargs="?", default="INFO")
 args = vars(parser.parse_args())
 
 dsf_base_url = args["dsfbaseurl"]
-site_identifiers = args["siteidents"].split(",")
 log_level = args["loglevel"]
 cert_file = args["certfile"]
 key_file = args["keyfile"]
@@ -283,7 +281,6 @@ def validate_report(site_report):
         return False
 
     return ensure_all_queries(site_report)
-
 
 
 if __name__ == "__main__":
