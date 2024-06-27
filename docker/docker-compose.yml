@@ -4,7 +4,7 @@ services:
             context: ..
             dockerfile: docker/Dockerfile
         environment:
-            - DSF_BASE_URL=${MII_REPORT_CLIENT_DSF_BASE_URL}
+            - DSF_BASE_URL=${DSF_BASE_URL}
         volumes:
             - ../config/report-queries.json:/opt/reportclient/config/report-queries.json
             - ../config/config.yml:/opt/reportclient/config/config.yml
