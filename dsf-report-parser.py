@@ -156,7 +156,7 @@ def get_status_queries(entry_array):
     }
 
     for entry in entry_array:
- 
+
         resource = entry['resource']
 
         if resource['resourceType'] != 'Bundle':
@@ -235,19 +235,21 @@ def get_capability_statement(entry_array):
     return cap_stat
 
 
-def generate_report(json_report, site_ident):
+def generate_report(json_report_search_result, site_ident):
     with open("config/report-queries.json", "r") as fp:
         site_report = json.load(fp)
 
     site_report['siteName'] = site_ident
 
-    if "entry" not in json_report:
+    if "entry" not in json_report_search_result:
         logging.warning(f'No report for site {site_ident} found - not converting')
         return None
 
-    site_report['datetime'] = datetime.datetime.fromisoformat(json_report['entry'][0]['resource']['meta']['lastUpdated']).strftime("%Y-%m-%dT%H:%M:%S")
-    site_report['statusQueries'] = get_status_queries(json_report['entry'][0]['resource']['entry'])
-    site_report['capabilityStatement'] = get_capability_statement(json_report['entry'][0]['resource']['entry'])
+    json_report = json_report_search_result['entry'][0]
+
+    site_report['datetime'] = datetime.datetime.fromisoformat(json_report['resource']['meta']['lastUpdated']).strftime("%Y-%m-%dT%H:%M:%S")
+    site_report['statusQueries'] = get_status_queries(json_report['resource']['entry'])
+    site_report['capabilityStatement'] = get_capability_statement(json_report['resource']['entry'])
     return site_report
 
 
