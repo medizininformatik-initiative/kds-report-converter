@@ -1,0 +1,13 @@
+services:
+    cds-report-converter:
+        build:
+            context: ..
+            dockerfile: docker/Dockerfile
+        environment:
+            - DSF_BASE_URL=${MII_REPORT_CLIENT_DSF_BASE_URL}
+        volumes:
+            - ../config/report-queries.json:/opt/reportclient/config/report-queries.json
+            - ../config/config.yml:/opt/reportclient/config/config.yml
+            - ../reports:/opt/reportclient/reports
+            - ${DSF_CERT_PATH:-./certs/cert.pem}:/opt/reportclient/certs/cert.pem
+            - ${DSF_KEY_PATH:-./certs/key.pem}:/opt/reportclient/certs/key.pem

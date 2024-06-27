@@ -1,0 +1,9 @@
+*.pem
+!reports/README.md
+test-capability.py
+reports/*.json
+*.p12
+dev-call.sh
+.env
+.DS_Store
+config.yml

@@ -1,0 +1,15 @@
+site-mapping: |
+  {
+     "ukaachen.de": "UKA","uk-augsburg.de": "UKAU","charite.de": "Charité","ukbonn.de": "UKB","ukdd.de": "UKDD","uniklinik-duesseldorf.de": "UKD","www.uk-erlangen.de": "UKEr","uk-essen.de": "UME","kgu.de": "UKF","uniklinik-freiburg.de": "UKFR","uni-giessen.de": "UKGI",
+     "umg.eu": "UMG","www.medizin.uni-greifswald.de": "UKG","uk-halle.de": "UKH","uke.de": "UKE","mh-hannover.de": "MHH","ukhd.de": "UKHD","uniklinikum-jena.de": "UKJ","uk-koeln.de": "UKK","uniklinikum-leipzig.de": "UKL","www.med.uni-magdeburg.de": "UMMD",
+     "unimedizin-mainz.de": "UM","umm.de": "UMM","uni-marburg.de": "UKMR","lmu-klinikum.de": "KUM","mri.tum.de": "MRI","ukm.de": "UKM","ukr.de": "UKR",
+     "med.uni-rostock.de": "UMR","uks.eu": "UKS","uksh.de": "UKSH","medizin.uni-tuebingen.de": "UKT","uniklinik-ulm.de": "UKU","ukw.de": "UKW",
+     "forschen-fuer-gesundheit.de": "FDPG","highmed.org": "HiGHmed","hs-heilbronn.de": "DSF","num-codex.de": "CRR", "klinikumchemnitz.de": "KCH"
+  }
+
+mii-relevant-resources: |
+  [
+   "Patient", "Encounter", "Observation", "Procedure", "Consent",
+   "Medication", "MedicationStatement", "MedicationAdministration", "Condition",
+   "Specimen", "DiagnosticReport", "ResearchSubject", "ServiceRequest"
+  ]
