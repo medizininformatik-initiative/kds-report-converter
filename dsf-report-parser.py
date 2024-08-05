@@ -41,7 +41,9 @@ status_query_name_lookup = {}
 list_of_report_queries = set()
 
 for query in site_report['statusQueries']:
-    status_query_name_lookup[query['query']] = query
+
+    if query['type'] != 'year':
+        status_query_name_lookup[query['query']] = query
 
 
 def get_next_link(link_elem):
@@ -149,7 +151,7 @@ def get_status_queries(entry_array):
             "type": "year",
             "category": "profile",
             "name": "Jahresabfrage-Fall",
-            "query": "/Encounter?_summary=count",
+            "query": "/Encounter?_profile:below=https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung&type=http://fhir.de/CodeSystem/Kontaktebene|einrichtungskontakt&_summary=count",
             "dateParam": "date",
             "responseByYear": []
         }
@@ -276,7 +278,6 @@ def validate_report(site_report):
 
     try:
         validate(instance=site_report, schema=kds_schema)
-
     except ValidationError as validationError:
         logging.error("VALIDATION ERROR: Schema not fulfilled")
         logging.error(validationError.message)
@@ -291,6 +292,9 @@ if __name__ == "__main__":
     site_identifiers = get_site_identifiers()
 
     for site_identifier in site_identifiers:
+
+        logging.info(f'##### Report for site: {site_identifier}')
+
 
         if site_identifier not in site_mapping:
             logging.info("No mapping for site - falling back to ident")
@@ -310,5 +314,7 @@ if __name__ == "__main__":
             logging.error(f'Report for site {site_ident} did not validate => not saving to file')
             continue
 
+
+        logging.info(f'SUCCESS: Converted report for site {site_ident}')
         with open(f'reports/mii-report-site-{site_ident}_{site_report["datetime"]}.json', "w+") as fp:
             json.dump(site_report, fp)
