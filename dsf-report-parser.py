@@ -314,7 +314,6 @@ if __name__ == "__main__":
             logging.error(f'Report for site {site_ident} did not validate => not saving to file')
             continue
 
-
         logging.info(f'SUCCESS: Converted report for site {site_ident}')
         with open(f'reports/mii-report-site-{site_ident}_{site_report["datetime"]}.json', "w+") as fp:
             json.dump(site_report, fp)
