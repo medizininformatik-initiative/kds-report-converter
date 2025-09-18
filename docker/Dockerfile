@@ -2,7 +2,7 @@ FROM python:3.13
 
 COPY docker/requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
-RUN useradd -r -s /bin/false 10001
+RUN useradd -r -u 10001 -s /bin/false appuser
 RUN mkdir opt/reportclient
 
 WORKDIR /opt/reportclient
