@@ -11,7 +11,7 @@ WORKDIR /opt/reportclient
 COPY dsf-report-parser.py /opt/reportclient/dsf-report-parser.py
 COPY kds-report-v2-schema.json /opt/reportclient/kds-report-v2-schema.json
 COPY docker/docker-entrypoint.sh /usr/local/bin/
-COPY config/.env.default /opt/reportclient/config/.env
+COPY config/config.default /opt/reportclient/config/config.yml
 RUN chown -R 10001:10001 /opt/reportclient
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
