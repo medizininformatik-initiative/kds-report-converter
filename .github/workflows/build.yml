@@ -4,13 +4,11 @@ on:
   push:
     branches:
     - main
-    - develop
     tags:
       - '*.*.*'
   pull_request:
     branches:
     - main
-    - develop
 
 jobs:
   test-build:
@@ -32,7 +30,7 @@ jobs:
           context: .
           push: false
           file: docker/Dockerfile
-          tags: feasibility-monitoring:test
+          tags: kds-report-converter:test
 
   build-and-push-image:
     runs-on: ubuntu-latest
