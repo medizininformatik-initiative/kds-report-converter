@@ -217,20 +217,29 @@ def get_capability_statement(entry_array):
 
         cap_stat = {
             "software": {
-                "name": resource['software']['name'],
-                "version": resource['software']['version']
+                "name": resource.get('software', {}).get('name', ""),
+                "version": resource.get('software', {}).get('version', "")
             },
             "instantiates": []
         }
 
-        search_resources = resource['rest'][0]['resource']
+        search_resources = resource.get('rest', [{}])[0].get('resource', {})
+
+        if len(search_resources) < 1:
+            logging.debug("No rest resources found - leaving empty")
+            cap_stat["restResources"] = {}
+            cap_stat
+
         for resource in search_resources:
-            if resource['type'] not in mii_relevant_resources:
+
+            res_type = resource.get('type', '')
+
+            if res_type not in mii_relevant_resources:
                 continue
 
             rest_resource = {}
-            rest_resource['type'] = resource['type']
-            rest_resource['searchParam'] = resource['searchParam']
+            rest_resource['type'] = res_type
+            rest_resource['searchParam'] = resource.get('searchParam', [])
             restResources.append(rest_resource)
 
     cap_stat["restResources"] = restResources
@@ -305,6 +314,8 @@ if __name__ == "__main__":
 
         dsf_report_url = f'{dsf_base_url}/Bundle?identifier=http://medizininformatik-initiative.de/sid/cds-report-identifier|{site_identifier}&_format=json&_sort=-_lastUpdated'
         resp = requests.get(dsf_report_url, cert=(cert_file, key_file))
+
+        print(json.dumps(resp.json()))
 
         site_report = generate_report(resp.json(), site_ident)
         if site_report is None:

@@ -7,3 +7,4 @@ dev-call.sh
 .env
 .DS_Store
 config.yml
+venv
