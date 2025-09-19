@@ -13,7 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Improved robustnes, by catching missing or empty fields in capabilityStatement
+- Improved robustness, by catching missing or empty fields in capabilityStatement
+- Update report-queries.json to newest version
 
 ### Security
 
