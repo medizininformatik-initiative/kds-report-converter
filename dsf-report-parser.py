@@ -315,8 +315,6 @@ if __name__ == "__main__":
         dsf_report_url = f'{dsf_base_url}/Bundle?identifier=http://medizininformatik-initiative.de/sid/cds-report-identifier|{site_identifier}&_format=json&_sort=-_lastUpdated'
         resp = requests.get(dsf_report_url, cert=(cert_file, key_file))
 
-        print(json.dumps(resp.json()))
-
         site_report = generate_report(resp.json(), site_ident)
         if site_report is None:
             continue
