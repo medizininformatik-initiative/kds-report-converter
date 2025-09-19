@@ -1,6 +1,6 @@
 services:
     cds-report-converter:
-        image: ghcr.io/medizininformatik-initiative/kds-report-converter:1.1.1
+        image: ghcr.io/medizininformatik-initiative/kds-report-converter:1.1.2
         environment:
             - DSF_BASE_URL=${DSF_BASE_URL}
         volumes:
