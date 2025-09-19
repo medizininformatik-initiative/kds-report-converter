@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+
+## [1.1.1] - 2025-09-19
+
+### Added
+
+- CI and container build
+
+### Changed
+
+- Improved robustnes, by catching missing or empty fields in capabilityStatement
+
+### Security
+
+- Added Renovate
+- Update used libraries
+
 ## [1.1.0] - 2024-08-07
 
 ### Changed
