@@ -6,6 +6,7 @@ from jsonschema import validate
 from jsonschema import ValidationError
 import logging
 import yaml
+import re
 
 CONFIG = None
 CONFIG_FILE = "config/config.yml"
@@ -38,12 +39,18 @@ with open("config/report-queries.json", "r") as fp:
     site_report = json.load(fp)
 
 status_query_name_lookup = {}
+year_query_name_lookup = {}
+year_queries = {}
 list_of_report_queries = set()
 
 for query in site_report['statusQueries']:
 
     if query['type'] != 'year':
         status_query_name_lookup[query['query']] = query
+    else:
+        year_query_name_lookup[query['query']] = query
+        year_queries[query['name']] = query
+        year_queries[query['name']]["responseByYear"] = []
 
 
 def get_next_link(link_elem):
@@ -145,17 +152,18 @@ def convert_search_res_to_json(search_res, ns):
 def get_status_queries(entry_array):
 
     status_queries = []
-    year_queries = {
-        "sum-encounter-all-year": {
-            "status": "success",
-            "type": "year",
-            "category": "profile",
-            "name": "Jahresabfrage-Fall",
-            "query": "/Encounter?_profile:below=https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung&type=http://fhir.de/CodeSystem/Kontaktebene|einrichtungskontakt&_summary=count",
-            "dateParam": "date",
-            "responseByYear": []
-        }
-    }
+
+    #year_queries = {
+    #    "sum-encounter-all-year": {
+    #        "status": "success",
+    #        "type": "year",
+    #        "category": "profile",
+    #        "name": "Jahresabfrage-Fall",
+    #        "query": "/Encounter?_profile:below=https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung&type=http://fhir.de/CodeSystem/Kontaktebene|einrichtungskontakt&_summary=count",
+    #        "dateParam": "date",
+    #        "responseByYear": []
+    #    }
+    #}
 
     for entry in entry_array:
 
@@ -166,19 +174,27 @@ def get_status_queries(entry_array):
 
         query_url = f'/{resource["link"][0]["url"]}'
 
-        if "Encounter?date=" in query_url:
-            date_index = query_url.find("date")
-            cur_year = query_url[date_index + 7:date_index + 11]
+        query_lookup_url = re.sub(r'date=[^&]*&', '', query_url)
 
-            year_query_resp = {
-              "year": int(cur_year),
-              "response": resource['total'],
-              "status": "success"
-            }
+        year_query = year_query_name_lookup.get(query_lookup_url, None)
 
-            year_queries['sum-encounter-all-year']['responseByYear'].append(year_query_resp)
-            list_of_report_queries.add('Jahresabfrage-Fall')
-            continue
+        if year_query is not None:
+
+            if "Encounter?date=" in query_url:
+                date_index = query_url.find("date")
+                cur_year = query_url[date_index + 7:date_index + 11]
+
+                year_query_resp = {
+                "year": int(cur_year),
+                "response": resource['total'],
+                "status": "success"
+                }
+
+                query_name = year_query['name']
+                year_queries[query_name]['responseByYear'].append(year_query_resp)
+                year_queries[query_name]['status'] = 'success'
+                list_of_report_queries.add(query_name)
+                continue
 
         status_query = status_query_name_lookup.get(query_url, None)
 
@@ -197,7 +213,10 @@ def get_status_queries(entry_array):
         status_queries.append(status_query)
         list_of_report_queries.add(status_query['name'])
 
-    status_queries.append(year_queries['sum-encounter-all-year'])
+    for value in year_queries.values():
+
+        status_queries.append(value)
+
     return status_queries
 
 
