@@ -563,7 +563,7 @@
       "type": "count",
       "category": "profile",
       "query": "/Observation?_profile:below=https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fernmetastasen&_summary=count"
-    },  
+    },
     {
       "name": "Medikation-Medikationsliste-mii",
       "type": "count",
@@ -611,6 +611,12 @@
       "type": "count",
       "category": "profile",
       "query": "/Procedure?_profile:below=https://www.medizininformatik-initiative.de/fhir/ext/modul-mtb/StructureDefinition/genomic-study-analysis&_summary=count"
+    },
+    {
+      "name": "MTB-Molekularer-Biomarker-mii",
+      "type": "count",
+      "category": "profile",
+      "query": "/Observation?_profile:below=https://www.medizininformatik-initiative.de/fhir/ext/modul-mtb/StructureDefinition/mii-pr-mtb-molekularer-biomarker&_summary=count"
     },
     {
       "name": "PRO-Questionnaire-Response-mii",
@@ -728,11 +734,11 @@
       "name": "Jahresabfrage-Fall-Vollstationaer",
       "type": "year",
       "category": "profile",
-      "query": "/Encounter?_profile:below=https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung&type=http://fhir.de/CodeSystem/Kontaktebene|einrichtungskontakt&type=http://fhir.de/CodeSystem/kontaktart-de|vorstationaer&class=http://terminology.hl7.org/CodeSystem/v3-ActCode|IMP&status=finished&_summary=count",
+      "query": "/Encounter?_profile:below=https://www.medizininformatik-initiative.de/fhir/core/modul-fall/StructureDefinition/KontaktGesundheitseinrichtung&type=http://fhir.de/CodeSystem/Kontaktebene|einrichtungskontakt&class=http://terminology.hl7.org/CodeSystem/v3-ActCode|IMP&status=finished&_summary=count",
       "dateParam": "date",
       "startYear": 2000
     },
-        {
+    {
       "name": "Consent-Broad-Consent-mii",
       "type": "count",
       "category": "profile",
