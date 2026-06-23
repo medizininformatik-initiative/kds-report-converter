@@ -1,20 +1,13 @@
-import copy
-import importlib.util
 import json
 import os
+import sys
 
 import pytest
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(REPO_ROOT, "src", "py"))
 
-# Load the hyphen-named module by file path
-_spec = importlib.util.spec_from_file_location(
-    "dsf_report_parser",
-    os.path.join(REPO_ROOT, "src", "py", "dsf-report-parser.py"),
-)
-_mod = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_mod)
-SiteReport = _mod.SiteReport
+from site_report import SiteReport
 
 TEST_DATA = os.path.join(REPO_ROOT, "src", "resources", "test-data")
 CONFIG_DIR = os.path.join(REPO_ROOT, "config", "report-queries")
@@ -302,3 +295,32 @@ class TestSave:
         saved = list((tmp_path / "reports").glob("*.json"))
         assert "2.0.1" in saved[0].name
         assert "TestSite" in saved[0].name
+
+
+# ---------------------------------------------------------------------------
+# End-to-end — one input file per report version, full pipeline
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize("version", ["2.0.1", "2.1.0"])
+def test_full_pipeline_for_version(version):
+    input_path = os.path.join(REPO_ROOT, "src", "resources", "test-data", f"dsf-search-result-v{version}.json")
+    with open(input_path) as f:
+        dsf_result = json.load(f)
+
+    template = load_template(version)
+    report = SiteReport(template, "test-site.de", "TestSite", MII_RELEVANT_RESOURCES)
+
+    assert report.generate(dsf_result) is True
+    assert report.validate() is True
+
+    report.save()
+
+    reports_dir = os.path.join(REPO_ROOT, "reports")
+    saved = [f for f in os.listdir(reports_dir) if f"version{version}" in f and "TestSite" in f]
+    assert len(saved) == 1
+    with open(os.path.join(reports_dir, saved[0])) as f:
+        output = json.load(f)
+    assert output["siteName"] == "TestSite"
+    assert output["version"] == version
+    assert output["datetime"] != ""
+    assert len(output["statusQueries"]) > 0
