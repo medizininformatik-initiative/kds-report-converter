@@ -7,7 +7,7 @@ import pytest
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(REPO_ROOT, "src", "py"))
 
-from site_report import SiteReport
+from site_report import SiteReport  # noqa: E402
 
 TEST_DATA = os.path.join(REPO_ROOT, "src", "resources", "test-data")
 CONFIG_DIR = os.path.join(REPO_ROOT, "config", "report-queries")
