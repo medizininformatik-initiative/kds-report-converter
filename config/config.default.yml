@@ -4,7 +4,9 @@ site-mapping: |
      "umg.eu": "UMG","www.medizin.uni-greifswald.de": "UKG","uk-halle.de": "UKH","uke.de": "UKE","mh-hannover.de": "MHH","ukhd.de": "UKHD","uniklinikum-jena.de": "UKJ","uk-koeln.de": "UKK","uniklinikum-leipzig.de": "UKL","www.med.uni-magdeburg.de": "UMMD",
      "unimedizin-mainz.de": "UM","umm.de": "UMM","uni-marburg.de": "UKMR","lmu-klinikum.de": "KUM","mri.tum.de": "MRI","ukm.de": "UKM","ukr.de": "UKR",
      "med.uni-rostock.de": "UMR","uks.eu": "UKS","uksh.de": "UKSH","medizin.uni-tuebingen.de": "UKT","uniklinik-ulm.de": "UKU","ukw.de": "UKW",
-     "forschen-fuer-gesundheit.de": "FDPG","highmed.org": "HiGHmed","hs-heilbronn.de": "DSF","num-codex.de": "CRR", "klinikumchemnitz.de": "KCH"
+     "forschen-fuer-gesundheit.de": "FDPG","highmed.org": "HiGHmed","hs-heilbronn.de": "DSF","num-codex.de": "CRR", "klinikumchemnitz.de": "KCH",
+     "diz-2.dev.forschen-fuer-gesundheit.de": "DIZ2", "ukowl.de": "UKOWL", "rub.de": "UKRUB", "diz-1.test.fdpg.forschen-fuer-gesundheit.de": "DIZ1TEST", "diz-2.test.fdpg.forschen-fuer-gesundheit.de": "DIZ2TEST",
+     "med.uni-saarland.de": "UdS", "unimedizin-ffm.de": "UKF", "mul-ct.de": "MUL-CT"
   }
 
 mii-relevant-resources: |
