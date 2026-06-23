@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## [1.2.0] - 2026-06-23
+
+### Added
+
+- Support for multiple year queries per report template
+- `SiteReport` class extracted into its own module for cleaner structure
+- Test suite with 16 pytest tests covering generate, validate, isolation, and save
+- Test data bundle for integration-style tests
+
+### Changed
+
+- Refactored report generation to remove side effects and support processing multiple sites from a single DSF result
+- Updated report-queries.json to newest version
+
+### CI
+
+- Added test and lint jobs (pytest + ruff) that must pass before Docker build
+- Enforced job ordering: test → docker-build → build-and-push-image
+- Fixed `actions/checkout` version (v5 → v4)
+
 ## [1.1.2] - 2025-09-19
 
 
