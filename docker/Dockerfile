@@ -3,15 +3,15 @@ FROM python:3.13
 COPY docker/requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
 RUN useradd -r -u 10001 -s /bin/false appuser
-RUN mkdir opt/reportclient
-RUN mkdir opt/reportclient/config
+RUN mkdir -p /opt/reportclient/config /opt/reportclient/src/py /opt/reportclient/src/resources /opt/reportclient/reports
 
 WORKDIR /opt/reportclient
 
-COPY dsf-report-parser.py /opt/reportclient/dsf-report-parser.py
-COPY kds-report-v2-schema.json /opt/reportclient/kds-report-v2-schema.json
+COPY src/py/dsf-report-parser.py /opt/reportclient/src/py/dsf-report-parser.py
+COPY src/resources/kds-report-v2-schema.json /opt/reportclient/src/resources/kds-report-v2-schema.json
 COPY docker/docker-entrypoint.sh /usr/local/bin/
 COPY config/config.default.yml /opt/reportclient/config/config.yml
+COPY config/report-queries /opt/reportclient/config/report-queries
 RUN chown -R 10001:10001 /opt/reportclient
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
