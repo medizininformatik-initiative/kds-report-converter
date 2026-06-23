@@ -193,6 +193,18 @@ class SiteReport:
 
     def save(self):
         """Write the generated report to a JSON file in the reports directory."""
-        filename = f'reports/mii-report-site-version{self.version}-{self.site_name}_{self._report["datetime"]}.json'
+        filename = f'reports/mii-report-site-{self.site_name}_{self._report["datetime"]}.json'
         with open(filename, "w+") as fp:
             json.dump(self._report, fp)
+
+
+def generate_newest_report(templates, dsf_result, site_identifier, site_name, mii_relevant_resources):
+    """Try templates newest-first, return the first SiteReport that generates and validates, or None."""
+    sorted_templates = sorted(templates, key=lambda r: tuple(int(x) for x in r['version'].split('.')), reverse=True)
+    for template in sorted_templates:
+        report = SiteReport(template, site_identifier, site_name, mii_relevant_resources)
+        if not report.generate(dsf_result):
+            break
+        if report.validate():
+            return report
+    return None

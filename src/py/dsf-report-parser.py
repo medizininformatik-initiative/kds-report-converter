@@ -4,7 +4,7 @@ import argparse
 import logging
 import yaml
 from pathlib import Path
-from site_report import SiteReport
+from site_report import SiteReport, generate_newest_report
 
 DEFAULT_TIMEOUT = 30
 
@@ -101,38 +101,27 @@ if __name__ == "__main__":
     site_identifiers = get_site_identifiers(dsf_base_url, cert_file, key_file)
     reports = get_reports("config/report-queries")
 
-    for report_template in reports:
-        version = report_template['version']
-        logging.info(f'############# Getting reports in report version: -- {version} -- #############')
+    for site_identifier in site_identifiers:
+        if len(activated_identifiers) > 0 and site_identifier not in activated_identifiers:
+            continue
 
-        for site_identifier in site_identifiers:
-            if len(activated_identifiers) > 0 and site_identifier not in activated_identifiers:
-                continue
+        if site_identifier not in site_mapping:
+            logging.info("No mapping for site - falling back to ident")
+            site_mapping[site_identifier] = site_identifier
 
-            logging.info(f'##### Report for site: {site_identifier}')
+        site_name = site_mapping[site_identifier]
 
-            if site_identifier not in site_mapping:
-                logging.info("No mapping for site - falling back to ident")
-                site_mapping[site_identifier] = site_identifier
+        dsf_report_url = (
+            f'{dsf_base_url}/Bundle'
+            f'?identifier=http://medizininformatik-initiative.de/sid/cds-report-identifier'
+            f'|{site_identifier}&_format=json&_sort=-_lastUpdated'
+        )
+        resp = requests.get(dsf_report_url, cert=(cert_file, key_file), timeout=DEFAULT_TIMEOUT)
 
-            site_name = site_mapping[site_identifier]
-            logging.info(f'Converting report for site {site_name}')
+        report = generate_newest_report(reports, resp.json(), site_identifier, site_name, mii_relevant_resources)
 
-            dsf_report_url = (
-                f'{dsf_base_url}/Bundle'
-                f'?identifier=http://medizininformatik-initiative.de/sid/cds-report-identifier'
-                f'|{site_identifier}&_format=json&_sort=-_lastUpdated'
-            )
-            resp = requests.get(dsf_report_url, cert=(cert_file, key_file), timeout=DEFAULT_TIMEOUT)
-
-            report = SiteReport(report_template, site_identifier, site_name, mii_relevant_resources)
-
-            if not report.generate(resp.json()):
-                continue
-
-            if not report.validate():
-                logging.error(f'Report for site {site_name} did not validate => not saving to file')
-                continue
-
-            logging.info(f'SUCCESS: Converted report for site {site_name}')
+        if report:
+            logging.info(f'SUCCESS: Converted report for site {site_name} using version {report.version}')
             report.save()
+        else:
+            logging.error(f'No report version succeeded for site {site_name}')

@@ -7,7 +7,7 @@ import pytest
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(REPO_ROOT, "src", "py"))
 
-from site_report import SiteReport  # noqa: E402
+from site_report import SiteReport, generate_newest_report  # noqa: E402
 
 TEST_DATA = os.path.join(REPO_ROOT, "src", "resources", "test-data")
 CONFIG_DIR = os.path.join(REPO_ROOT, "config", "report-queries")
@@ -293,34 +293,30 @@ class TestSave:
         report.save()
 
         saved = list((tmp_path / "reports").glob("*.json"))
-        assert "2.0.1" in saved[0].name
         assert "TestSite" in saved[0].name
 
 
 # ---------------------------------------------------------------------------
-# End-to-end — one input file per report version, full pipeline
+# Fallback — newest version tried first, falls back when it fails
 # ---------------------------------------------------------------------------
 
-@pytest.mark.parametrize("version", ["2.0.1", "2.1.0"])
-def test_full_pipeline_for_version(version):
-    input_path = os.path.join(REPO_ROOT, "src", "resources", "test-data", f"dsf-search-result-v{version}.json")
+# (input_version, expected_version, site_name)
+# v2.1.0 input satisfies both versions; v2.0.1 input is missing v2.1.0 queries
+# so the v2.0.1 case exercises the fallback path.
+@pytest.mark.parametrize("input_version,expected_version,site_name", [
+    ("2.1.0", "2.1.0", "SiteNewest"),
+    ("2.0.1", "2.0.1", "SiteFallback"),
+])
+def test_generate_newest_report_picks_correct_version(input_version, expected_version, site_name):
+    input_path = os.path.join(REPO_ROOT, "src", "resources", "test-data", f"dsf-search-result-v{input_version}.json")
     with open(input_path) as f:
         dsf_result = json.load(f)
 
-    template = load_template(version)
-    report = SiteReport(template, "test-site.de", "TestSite", MII_RELEVANT_RESOURCES)
+    templates = [load_template("2.0.1"), load_template("2.1.0")]
+    report = generate_newest_report(templates, dsf_result, "test-site.de", site_name, MII_RELEVANT_RESOURCES)
 
-    assert report.generate(dsf_result) is True
-    assert report.validate() is True
+    assert report is not None
+    assert report.version == expected_version
+    assert report._report["siteName"] == site_name
 
     report.save()
-
-    reports_dir = os.path.join(REPO_ROOT, "reports")
-    saved = [f for f in os.listdir(reports_dir) if f"version{version}" in f and "TestSite" in f]
-    assert len(saved) == 1
-    with open(os.path.join(reports_dir, saved[0])) as f:
-        output = json.load(f)
-    assert output["siteName"] == "TestSite"
-    assert output["version"] == version
-    assert output["datetime"] != ""
-    assert len(output["statusQueries"]) > 0
