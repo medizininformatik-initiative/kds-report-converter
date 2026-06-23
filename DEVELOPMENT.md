@@ -3,7 +3,7 @@
 
 ## Release Checklist
 
-1. Create a new release branch release/v<version>
+1. Create a new release branch release/v<version> from main
 2. Update the CHANGELOG based on commit history
 3. Create a commit with the title `Release v<version>`
 4. Create a PR from the release branch into the main branch
