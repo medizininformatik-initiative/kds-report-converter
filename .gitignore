@@ -8,3 +8,4 @@ dev-call.sh
 .DS_Store
 config.yml
 venv
+__pycache__
