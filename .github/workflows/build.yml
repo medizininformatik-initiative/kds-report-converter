@@ -26,7 +26,10 @@ jobs:
           cache-dependency-path: docker/requirements.txt
 
       - name: Install dependencies
-        run: pip install -r docker/requirements.txt pytest
+        run: pip install -r docker/requirements.txt pytest ruff
+
+      - name: Lint
+        run: ruff check src/
 
       - name: Run tests
         run: pytest
