@@ -4,7 +4,7 @@ import argparse
 import logging
 import yaml
 from pathlib import Path
-from site_report import SiteReport, generate_newest_report
+from site_report import generate_newest_report
 
 DEFAULT_TIMEOUT = 30
 
