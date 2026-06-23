@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## [1.3.0] - 2026-06-23
+
+### Added
+
+- Newest-first report version selection: for each site, the newest report template is tried first; falls back to older versions until one validates successfully
+- Only the newest successfully validated report is saved per site
+
+### Changed
+
+- Removed version from output filename (version is still present inside the report JSON)
+- Dockerfile now copies all of `src/py/` instead of individual files
+
+### Fixed
+
+- `site_report.py` was not copied into the Docker image after being extracted from `dsf-report-parser.py`
+
 ## [1.2.0] - 2026-06-23
 
 ### Added
