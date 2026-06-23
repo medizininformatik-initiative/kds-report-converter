@@ -7,7 +7,7 @@ RUN mkdir -p /opt/reportclient/config /opt/reportclient/src/py /opt/reportclient
 
 WORKDIR /opt/reportclient
 
-COPY src/py/dsf-report-parser.py /opt/reportclient/src/py/dsf-report-parser.py
+COPY src/py/ /opt/reportclient/src/py/
 COPY src/resources/kds-report-v2-schema.json /opt/reportclient/src/resources/kds-report-v2-schema.json
 COPY docker/docker-entrypoint.sh /usr/local/bin/
 COPY config/config.default.yml /opt/reportclient/config/config.yml
