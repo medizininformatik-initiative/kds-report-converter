@@ -1,4 +1,4 @@
-FROM python:3.13
+FROM python:3.14
 
 COPY docker/requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
